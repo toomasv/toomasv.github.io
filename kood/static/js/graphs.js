@@ -49,7 +49,7 @@ export const createProgressGraph = (transactions, totalXp) => {
   svg.setAttribute("viewBox", "0 0 400 300");
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-  const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  /*const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
   title.setAttribute("x", "50%");
   title.setAttribute("y", graphHeight + 30);
   title.setAttribute("dominant-baseline", "middle");
@@ -62,7 +62,7 @@ export const createProgressGraph = (transactions, totalXp) => {
   title.setAttribute("class", "title");
   title.textContent = "User progression over time";
 
-  svg.appendChild(title);
+  svg.appendChild(title);*/
 
   const backgroundLineHorizontalDistance =
     graphHeight / (graphHeightIncrements * yScale);
@@ -159,7 +159,7 @@ export const createProgressGraph = (transactions, totalXp) => {
     );
     circle.setAttribute("cx", data.x);
     circle.setAttribute("cy", data.y);
-    circle.setAttribute("r", "3");
+    circle.setAttribute("r", "2");
     circle.setAttribute("fill", "black");
     svg.appendChild(circle);
   }
@@ -174,8 +174,8 @@ export const createProgressGraph = (transactions, totalXp) => {
     svg.appendChild(line);
   }
 
-  document.getElementById("progressGraphContainer").innerHTML = "";
-  document.getElementById("progressGraphContainer").appendChild(svg);
+  document.getElementById("progressGraphInnerContainer").innerHTML = "";
+  document.getElementById("progressGraphInnerContainer").appendChild(svg);
 };
 
 export const createXpByProjectGraph = (data) => {
@@ -198,7 +198,7 @@ export const createXpByProjectGraph = (data) => {
   const notchWidth = (maxNotchValue * xRatio) / notchCount;
   const notchValue = maxNotchValue / notchCount;
 
-  const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  /*const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
   title.setAttribute("x", "50%");
   title.setAttribute("y", 25);
   title.setAttribute("dominant-baseline", "middle");
@@ -206,7 +206,7 @@ export const createXpByProjectGraph = (data) => {
   title.setAttribute("text-anchor", "middle");
   title.setAttribute("class", "title");
   title.textContent = "XP earned by project";
-  barGraph.appendChild(title);
+  barGraph.appendChild(title);*/
 
   data.forEach((item, index) => {
     const barLength = (item.amount / maxValue) * barWidth;

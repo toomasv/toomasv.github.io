@@ -97,7 +97,32 @@ a {
    align-items: stretch;
 }
 
+.userData {
+   height: 250px;
+
+   border: rgb(108, 153, 250) 3px solid;
+   border-radius: 10px;
+   text-align: center;
+   flex-grow: 1;
+   overflow: auto;
+   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.auditData {
+   height: 250px;
+   min-width: 300px;
+   text-align: center;
+   flex-grow: 1;
+   overflow: auto;
+}
+
 .progressGraphContainer {
+   padding: 10px;
+   max-width: 800px;
+   flex-grow: 1;
+}
+
+#progressGraphInnerContainer {
    padding: 10px;
    max-width: 800px;
    transform: scaleY(-1);
@@ -125,26 +150,7 @@ a {
    width: 100%;
 }
 
-.userData {
-   height: 250px;
-
-   border: rgb(108, 153, 250) 3px solid;
-   border-radius: 10px;
-   text-align: center;
-   flex-grow: 1;
-   overflow: auto;
-   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-}
-
-.auditData {
-   height: 250px;
-   min-width: 300px;
-   text-align: center;
-   flex-grow: 1;
-   overflow: auto;
-}
-
-.auditData, .userData, .xpByTaskInnerContainer, .progressGraphContainer, .progressGraph {
+.auditData, .userData, .xpByTaskInnerContainer, .progressGraphContainer {
    background-color: #D8D0D0;
    background: linear-gradient(0deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
    border: rgb(0, 0, 0) 1px solid;
@@ -153,20 +159,12 @@ a {
    padding: 10px;
 }
 
-.xpByTaskInnerContainer, .progressGraphContainer {
+.xpByTaskInnerContainer, .progressGraphContainer, .progressGraphInnerContainer {
    width: 100%; 
    height: auto; 
 }
 
 /* deals with reversed -Y scaling */
-.progressGraphContainer {
+.progressGraphInnerContainer {
    background: linear-gradient(180deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
-}
-
-.progressGraphContainer .title {
-   font-size: 16px;
-}
-
-.xpByTaskInnerContainer .title {
-   font-size: 32px;
 }
