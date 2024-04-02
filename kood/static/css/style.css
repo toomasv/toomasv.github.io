@@ -1,0 +1,172 @@
+body {
+   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   background-color: #CDC6BE;
+   margin: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 100vh;
+   padding-top: 10px;
+}
+
+header {
+   padding: 2vh;
+   font-weight: bold;
+}
+.loginFormContainer {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+}
+
+a {
+   font-weight: normal; 
+   font-size: 20px;
+}
+
+#loginForm {
+   width: 40vw;
+   height: 40vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   border: 1px solid #000000;
+   border-radius: 10px;
+}
+
+.errorMessage {
+   margin-top: 1px;
+   color: rgb(102, 19, 19);
+   height: 5px;
+   font-size: 14px;
+}
+
+.inputbox {
+   border: #000000 solid 1px;
+   background-color: #CDC6BE;
+   border-radius: 5px;
+   height: 30px;
+}
+
+.button {
+   cursor: pointer;
+   display: inline-block;
+   font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+   padding: 7px 20px;
+   text-align: center;
+   text-decoration: none;
+   border: 1px solid #000000;
+   border-radius: 5px;
+
+   transition: all .2s ease-in-out;
+   font-size: 16px;
+   user-select: none;
+   -webkit-user-select: none;
+   touch-action: manipulation;
+   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.button:disabled {
+   background-color: #7c7874;
+   box-shadow: none;
+   color: rgb(255, 255, 255);
+}
+
+.button:hover {
+   background-color: #CD6767;
+}
+
+.button:disabled:hover {
+   cursor: default;
+}
+
+#loginBtn {
+   margin-top: 30px;
+}
+
+#logoutBtn {
+   margin-top: 10px;
+}
+
+.row {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   align-items: stretch;
+}
+
+.progressGraphContainer {
+   padding: 10px;
+   max-width: 800px;
+   transform: scaleY(-1);
+   flex-grow: 1;
+}
+
+.xpByTaskContainer {
+   min-width: 370px;
+   position: relative;
+   flex-grow: 0;
+
+}
+
+.xpByTaskInnerContainer {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   overflow-y: auto;
+}
+
+.xpByTaskGraphContainer {
+   flex: 1;
+   overflow-y: auto;
+   width: 100%;
+}
+
+.userData {
+   height: 250px;
+
+   border: rgb(108, 153, 250) 3px solid;
+   border-radius: 10px;
+   text-align: center;
+   flex-grow: 1;
+   overflow: auto;
+   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.auditData {
+   height: 250px;
+   min-width: 300px;
+   text-align: center;
+   flex-grow: 1;
+   overflow: auto;
+}
+
+.auditData, .userData, .xpByTaskInnerContainer, .progressGraphContainer, .progressGraph {
+   background-color: #D8D0D0;
+   background: linear-gradient(0deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
+   border: rgb(0, 0, 0) 1px solid;
+   border-radius: 15px;
+   margin: 10px;
+   padding: 10px;
+}
+
+.xpByTaskInnerContainer, .progressGraphContainer {
+   width: 100%; 
+   height: auto; 
+}
+
+/* deals with reversed -Y scaling */
+.progressGraphContainer {
+   background: linear-gradient(180deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
+}
+
+.progressGraphContainer .title {
+   font-size: 16px;
+}
+
+.xpByTaskInnerContainer .title {
+   font-size: 32px;
+}

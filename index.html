@@ -34,24 +34,8 @@
   <h1>Welcome to my personal website</h1>
   <p>Hi there!</p>
   <p>Just starting to build my personal website. Stay tuned for updates!</p>
+  <!--p><a href="kood/">GraphQL</a></p-->
   <script>
-   // Example JWT token, with explicit generation
-   var token
-   var header = {
-     "alg": "HS256",
-     "typ": "JWT"
-   }
-   var data = {
-     "sub": "1234567890",
-     "name": "John Doe",
-     "admin": true
-   }
-   var secret
-   var encodedHeader = btoa(JSON.stringify(header))
-   var encodedData = btoa(JSON.stringify(data))
-   var signature = btoa(encodedHeader + "." + encodedData)
-   token = encodedHeader + "." + encodedData + "." + signature
-   console.log(token)
   </script>
 </body>
 </html>

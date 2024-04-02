@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script type="module" src="static/js/graphql.js"></script>
+    <title>GraphQL</title>
+</head>
+<body>
+    <div class="row">
+        <div class="auditData">
+            <h1>Audit information</h1>
+            <a>Audits ratio:</a>
+            <a id="auditRatio"></a><br>
+            <a>Audit XP earned:</a>
+            <a id="auditsDone"></a><br>
+            <a>Audit XP received:</a>
+            <a id="auditsReceived"></a><br>
+        </div>
+        <div class="userData">
+            <h1 id="username"></h1>
+            <a>Full name:</a>
+            <a id="firstName"></a>
+            <a id="lastName"></a><br>
+            <a>Location:</a>
+            <a id="location"></a><br>
+            <a>Age:</a>
+            <a id="age"></a><br>
+            <a>Total XP:</a>
+            <a id="xp"></a><br>
+            <button id="logoutBtn" class="button">Log out</button>
+        </div>
+        <div id="progressGraphContainer" class="progressGraphContainer"></div>
+        <div id="xpByTaskContainer" class="xpByTaskContainer">
+            <div class="xpByTaskInnerContainer">
+                <div style="width: fit-content; height: 30px; position: absolute; bottom: 0;">
+                    <svg id="comparisonGraph" width="350px" height="100%"></svg>
+                </div>
+                <div id="xpByTaskGraphContainer" class="xpByTaskGraphContainer">
+                    <svg id="barGraph" width="100%" height="100%"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

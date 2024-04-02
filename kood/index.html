@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="static/css/style.css">
+   <title>GraphQL</title>
+</head>
+<body>
+   <div class="loginFormContainer">
+      <form id="loginForm">
+         <div class="header">
+            <header>Please log in with your 01/intra username and password:</header>
+         </div>
+         <input class="inputbox" id="usernameOrEmail" name="usernameOrEmail" placeholder="Username or Email"></input>
+         <div class="errorMessage">
+            <span id="usernameOrEmail-error"></span>
+         </div>
+         <input class="inputbox" id="password" name="password" placeholder="Password" type="password" id="password" maxlength="30"></input>
+         <div class="errorMessage">
+            <span id="password-error"></span>
+         </div>
+         <br>
+         <button id="loginBtn" class="button" type="submit" disabled>Log in</button>
+      </form>
+   </div>
+   <script src="/kood/static/js/index.js"></script>
+</body>
+</html>
