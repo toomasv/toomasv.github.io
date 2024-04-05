@@ -37,32 +37,12 @@ export const createProgressGraph = (transactions, totalXp) => {
     };
   });
 
-  /*
-   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-   svg.setAttribute("width", graphWidth)
-   svg.setAttribute("height", graphHeight + yPadding * 2)
-   */
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
-  // !
+
   svg.setAttribute("viewBox", "0 0 400 300");
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-
-  /*const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  title.setAttribute("x", "50%");
-  title.setAttribute("y", graphHeight + 30);
-  title.setAttribute("dominant-baseline", "middle");
-  title.setAttribute("stroke", "black");
-  title.setAttribute("text-anchor", "middle");
-  title.setAttribute(
-    "transform",
-    `rotate(180 0 ${graphHeight + 30}) scale(-1, 1)`
-  );
-  title.setAttribute("class", "title");
-  title.textContent = "User progression over time";
-
-  svg.appendChild(title);*/
 
   const backgroundLineHorizontalDistance =
     graphHeight / (graphHeightIncrements * yScale);
@@ -174,13 +154,13 @@ export const createProgressGraph = (transactions, totalXp) => {
     svg.appendChild(line);
   }
 
-  document.getElementById("progressGraphInnerContainer").innerHTML = "";
-  document.getElementById("progressGraphInnerContainer").appendChild(svg);
+  document.getElementById("lineGraph").innerHTML = "";
+  document.getElementById("lineGraph").appendChild(svg);
 };
 
 export const createXpByProjectGraph = (data) => {
   const barGraph = document.getElementById("barGraph");
-  const comparisonChart = document.getElementById("comparisonGraph");
+  barGraph.innerHTML = "";
 
   const barHeight = 20;
   const barGap = 10;
@@ -190,23 +170,13 @@ export const createXpByProjectGraph = (data) => {
   barGraph.setAttribute("height", graphHeight);
 
   const maxValue = Math.max(...data.map((item) => item.amount));
-  const maxNotchValue = roundToHighest25(maxValue / 1000);
-  const xRatio = barWidth / (maxValue / 1000);
+  //const maxNotchValue = roundToHighest25(maxValue / 1000);
+  //const xRatio = barWidth / (maxValue / 1000);
 
-  const notchCount = maxValue > 10000 ? 10 : 5;
+  //const notchCount = maxValue > 10000 ? 10 : 5;
   const xPadding = 10;
-  const notchWidth = (maxNotchValue * xRatio) / notchCount;
-  const notchValue = maxNotchValue / notchCount;
-
-  /*const title = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  title.setAttribute("x", "50%");
-  title.setAttribute("y", 25);
-  title.setAttribute("dominant-baseline", "middle");
-  title.setAttribute("stroke", "black");
-  title.setAttribute("text-anchor", "middle");
-  title.setAttribute("class", "title");
-  title.textContent = "XP earned by project";
-  barGraph.appendChild(title);*/
+  //const notchWidth = (maxNotchValue * xRatio) / notchCount;
+  //const notchValue = maxNotchValue / notchCount;
 
   data.forEach((item, index) => {
     const barLength = (item.amount / maxValue) * barWidth;
