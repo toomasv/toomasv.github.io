@@ -4,21 +4,27 @@ export const createProgressGraph = (transactions, totalXp) => {
   const dates = transactions.map(
     (transaction) => new Date(transaction.createdAt)
   );
-  const earliestDate = new Date(Math.min(...dates));
-  earliestDate.setDate(1); // set earliestdate to the first of the first transaction month
+  const earliestTime = new Date(Math.min(...dates));
 
-  const currentDate = new Date();
-  if (currentDate.getDate() !== 1) {
-    // set currentdate to the first of the next month, that way the months comparison lines are consistent
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    currentDate.setDate(1);
+  const latestTime = new Date(Math.max(...dates));
+  const timeDiff = latestTime - earliestTime;
+  const dayDiff = timeDiff / 1000 / 60 / 60 / 24;
+  console.log("timeDiff:", dayDiff);
+
+  if (dayDiff > 30 && latestTime.getDate() !== 1) {
+    // set latestTime to the first of the next month, that way the months comparison lines are consistent
+    latestTime.setMonth(latestTime.getMonth() + 1);
+    latestTime.setDate(1);
   }
 
   // add the baseline to the beginning of the transactions array
-  transactions.unshift({
-    amount: 0,
-    createdAt: Math.min(...dates),
-  });
+  if (dayDiff > 30 && earliestTime.getDate() !== 1) {
+    earliestTime.setDate(1); // set earliestTime to the first of the first transaction month
+    transactions.unshift({
+      amount: 0,
+      createdAt: Math.min(...dates),
+    });
+  }
 
   const graphWidth = 440;
   const graphHeight = 300;
@@ -26,13 +32,13 @@ export const createProgressGraph = (transactions, totalXp) => {
   const yPadding = 20;
 
   totalXp /= 1000;
-  const xScale = (graphWidth - xPadding * 2) / (currentDate - earliestDate);
+  const xScale = (graphWidth - xPadding * 2) / (latestTime - earliestTime);
   const yScale = (graphHeight - yPadding * 2) / totalXp;
 
   const graphData = transactions.map((transaction) => {
     totalXp -= transaction.amount / 1000;
     return {
-      x: (new Date(transaction.createdAt) - earliestDate) * xScale + xPadding,
+      x: (new Date(transaction.createdAt) - earliestTime) * xScale + xPadding,
       y: graphHeight - (totalXp * yScale + yPadding),
     };
   });
@@ -87,24 +93,25 @@ export const createProgressGraph = (transactions, totalXp) => {
   ]);
 
   let bigTimeInterval = false;
-  let monthsDifference = calculateMonthsDifference(earliestDate, currentDate);
+  let monthsDifference = calculateMonthsDifference(earliestTime, latestTime);
 
   // if the time period is longer than a year, make it so the background lines for time are at every 3 months instead of every month in order to save space
   if (monthsDifference >= 12) {
     bigTimeInterval = true;
     for (let i = monthsDifference; i % 3 !== 0; i++) {
-      currentDate.setMonth(currentDate.getMonth() + 1);
+      latestTime.setMonth(latestTime.getMonth() + 1);
       monthsDifference++;
     }
     monthsDifference /= 3;
   }
 
-  const backgroundLineVerticalIncrement =
-    (graphWidth - xPadding * 2) / monthsDifference;
-  let startMonth = earliestDate.getMonth();
-  let startYear = earliestDate.getFullYear().toString().slice(2);
+  const tDiff = dayDiff > 30 ? monthsDifference : dayDiff;
+  const backgroundLineVerticalIncrement = (graphWidth - xPadding * 2) / tDiff;
 
-  for (let i = 0; i <= monthsDifference; i++) {
+  let startMonth = earliestTime.getMonth();
+  let startYear = earliestTime.getFullYear().toString().slice(2);
+
+  for (let i = 0; i <= tDiff; i++) {
     if (startMonth >= 12) {
       startMonth -= 12;
       startYear++;
@@ -126,10 +133,16 @@ export const createProgressGraph = (transactions, totalXp) => {
     text.setAttribute("fill", "black");
     text.setAttribute("font-size", "12");
     text.setAttribute("transform", `rotate(180 0 5) scale(-1, 1)`);
-    text.textContent = `${monthMap.get(startMonth)} ${startYear}`;
+    if (dayDiff > 30) {
+      text.textContent = `${monthMap.get(startMonth)} ${startYear}`;
+      bigTimeInterval ? (startMonth += 3) : startMonth++;
+    } else {
+      let day = earliestTime.getDate() + i;
+      let month = earliestTime.getMonth() + 1;
+      let maxDay = new Date(earliestTime.getFullYear(), month, 0).getDate();
+      text.textContent = `${day > maxDay ? day - maxDay : day}`;
+    }
     svg.appendChild(text);
-
-    bigTimeInterval ? (startMonth += 3) : startMonth++;
   }
 
   for (const data of graphData) {

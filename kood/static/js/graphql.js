@@ -32,7 +32,10 @@ const loadUserProfile = async () => {
             showData("div-01\\/[-\\\\w]+$");
             break;
           case "piscine-go":
-            showData("piscine-go");
+            showData("piscine-go\\/quest");
+            break;
+          case "exam":
+            showData("piscine-go\\/exam");
             break;
           case "piscine-js":
             showData("div-01\\/piscine-js");
@@ -77,25 +80,7 @@ const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
   const results = await getQueryResults(queryBody, userToken);
   const totalXp =
     results.data.user[0].transactions_aggregate.aggregate.sum.amount;
-  /*
-              transactions(
-                where: {
-                    path: {_regex: "^\\/johvi\\/${type}"}
-                    type: {_eq:"xp"}
-                },
-            )   {
-                    amount
-                }
-            }
 
-  const totalXp = results.data.user[0].transactions.reduce(
-    (total, transaction) => total + transaction.amount,
-    0
-  );
- 
-  console.log("totalXP1:", totalXp);
-  console.log("totalXP2:", results.data.user[0].transactions_aggregate.aggregate.sum.amount);
-*/
   const userData = {
     username: results.data.user[0].login,
     firstName: results.data.user[0].firstName,
@@ -113,11 +98,11 @@ const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 // Variable query
 const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
   const query = `
-        query GetXpByProject($transactionType: String!) {
+        query GetXpByProject($type: String!) {
             transaction(
                 where: {
                     path: { _regex: "^\\/johvi\\/${type}" }
-                    type: { _eq: $transactionType }
+                    type: { _eq: $type }
                 },
                 order_by: { amount: asc }
             ) {
@@ -126,11 +111,10 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
             }
         }
     `;
-
   const queryBody = {
-    query: query,
+    query,
     variables: {
-      transactionType: "xp",
+      type: "xp",
     },
   };
 
@@ -138,14 +122,27 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 
   let pathStart;
   if (RegExp("piscine-js").test(type)) pathStart = "/johvi/div-01/piscine-js/";
-  else if (RegExp("piscine-go").test(type)) pathStart = "/johvi/piscine-go/";
+  else if (RegExp("quest").test(type)) pathStart = "/johvi/piscine-go/";
+  else if (RegExp("exam").test(type))
+    pathStart = /^.*(deprecated-24-01-2024-|exam-..\/)/;
   else pathStart = "/johvi/div-01/";
 
   const xpByProjectData = results.data.transaction.map((transaction) => {
     const updatedPath = transaction.path.replace(pathStart, "");
     return { ...transaction, path: updatedPath };
   });
-  return xpByProjectData;
+  console.log("result:", xpByProjectData);
+  let data = xpByProjectData.reduce((acc, curr) => {
+    const item = curr.path.split("/")[0];
+    acc.set(item, acc.get(item) ? acc.get(item) + curr.amount : curr.amount);
+    return acc;
+  }, new Map());
+  data = Array.from(data).map(([key, value]) => {
+    return { path: key, amount: value };
+  });
+  data.sort((a, b) => a.amount - b.amount);
+  console.log("data:", data);
+  return data;
 };
 
 // Normal query
@@ -176,6 +173,8 @@ const getUserProgress = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 
 const getQueryResults = async (queryBody, userToken) => {
   const url = "https://01.kood.tech/api/graphql-engine/v1/graphql";
+
+  console.log("queryBody:", queryBody);
 
   const options = {
     method: "POST",
@@ -255,7 +254,6 @@ const format2 = (number, unit = false) => {
     }
   }
   let rounded = number.toFixed(2);
-  console.log("rounded:", rounded);
   if (rounded == 0) {
     rounded = "0";
   } else {
