@@ -1,6 +1,6 @@
 body {
-   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-   background-color: #CDC6BE;
+   font-family:Roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   background-color: #E79292;
    margin: 0;
    display: flex;
    align-items: center;
@@ -39,7 +39,7 @@ a {
 
 .errorMessage {
    margin-top: 1px;
-   color: rgb(102, 19, 19);
+   color: rgb(128, 21, 21);
    height: 5px;
    font-size: 14px;
 }
@@ -98,20 +98,22 @@ a {
    align-items: stretch;
 }
 
+.box {
+   background-color: #578B8B;
+   min-width: 300px;
+}
+
 #userData {
    height: 250px;
-
    border: rgb(108, 153, 250) 3px solid;
    border-radius: 10px;
    text-align: center;
    flex-grow: 1;
    overflow: auto;
-   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 #auditData {
    height: 250px;
-   min-width: 300px;
    text-align: center;
    flex-grow: 1;
    overflow: auto;
@@ -136,19 +138,13 @@ a {
    flex-grow: 1;
 }
 
-.xpByTaskContainer {
-   min-width: 370px;
-   position: relative;
-   flex-grow: 0;
-
-}
-
 .xpByTaskInnerContainer {
    position: relative;
    display: flex;
    flex-direction: column;
    justify-content: flex-end;
    overflow-y: auto;
+   max-width: 330px;
 }
 
 .xpByTaskInnerContainer h1 {
@@ -162,8 +158,8 @@ a {
 }
 
 #auditData, #userData, .xpByTaskInnerContainer, #progressGraphContainer {
-   background-color: #D8D0D0;
-   background: linear-gradient(0deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
+   /*background-color: #D8D0D0;
+   background: linear-gradient(0deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);*/
    border: rgb(0, 0, 0) 1px solid;
    border-radius: 15px;
    margin: 10px;
@@ -177,7 +173,7 @@ a {
 
 /* deals with reversed -Y scaling */
 #lineGraph {
-   background: linear-gradient(180deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);
+   /*background: linear-gradient(180deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);*/
 }
 
 #generalSelection {
