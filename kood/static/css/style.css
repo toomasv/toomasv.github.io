@@ -1,6 +1,6 @@
 body {
    font-family:Roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-   background-color: #E79292;
+   background-color: #f6d6c2;
    margin: 0;
    display: flex;
    align-items: center;
@@ -39,14 +39,14 @@ a {
 
 .errorMessage {
    margin-top: 1px;
-   color: rgb(128, 21, 21);
+   color: #ae282c;
    height: 5px;
    font-size: 14px;
 }
 
 .inputbox {
    border: #000000 solid 1px;
-   background-color: #CDC6BE;
+   background-color: #8ec1da;
    border-radius: 5px;
    height: 30px;
 }
@@ -76,7 +76,7 @@ a {
 }
 
 .button:hover {
-   background-color: #CD6767;
+   background-color: #d47264;
 }
 
 .button:disabled:hover {
@@ -99,7 +99,7 @@ a {
 }
 
 .box {
-   background-color: #578B8B;
+   background-color: #8ec1da;
    min-width: 300px;
 }
 

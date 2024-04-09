@@ -5,7 +5,6 @@ export const createProgressGraph = (transactions, totalXp) => {
     (transaction) => new Date(transaction.createdAt)
   );
   const earliestTime = new Date(Math.min(...dates));
-
   const latestTime = new Date(Math.max(...dates));
   const timeDiff = latestTime - earliestTime;
   const dayDiff = Math.ceil(timeDiff / 1000 / 60 / 60 / 24);
@@ -14,6 +13,9 @@ export const createProgressGraph = (transactions, totalXp) => {
     // set latestTime to the first of the next month, that way the months comparison lines are consistent
     latestTime.setMonth(latestTime.getMonth() + 1);
     latestTime.setDate(1);
+  } else {
+    latestTime.setDate(latestTime.getDate() + 1);
+    latestTime.setHours(0, 0, 0, 0);
   }
 
   // add the baseline to the beginning of the transactions array
@@ -23,7 +25,14 @@ export const createProgressGraph = (transactions, totalXp) => {
       amount: 0,
       createdAt: Math.min(...dates),
     });
+  } else {
+    earliestTime.setHours(0, 0, 0, 0);
+    transactions.unshift({
+      amount: 0,
+      createdAt: Math.min(...dates),
+    });
   }
+
 
   const graphWidth = 440;
   const graphHeight = 300;
@@ -70,7 +79,7 @@ export const createProgressGraph = (transactions, totalXp) => {
       y1: y,
       x2: graphWidth - xPadding,
       y2: y,
-      stroke: "#729A9A",
+      stroke: "#cde1ec",
       "stroke-width": "0.5px",
     });
     svg.appendChild(line);
@@ -83,6 +92,11 @@ export const createProgressGraph = (transactions, totalXp) => {
       transform: `rotate(180 0 ${y}) scale(-1, 1)`,
     });
     text.textContent = i * graphHeightIncrements + " kB";
+    hsvg.appendChild(text);
+    const dx = Math.round(
+      xPadding - text.getComputedTextLength()
+    );
+    text.setAttribute("x", dx-5);
     svg.appendChild(text);
   }
 
@@ -132,7 +146,7 @@ export const createProgressGraph = (transactions, totalXp) => {
       y1: yPadding,
       x2: x,
       y2: y,
-      stroke: "#729A9A",
+      stroke: "#cde1ec",
       "stroke-width": "0.5px",
     });
     svg.appendChild(line);
@@ -168,7 +182,7 @@ export const createProgressGraph = (transactions, totalXp) => {
       cx: data.x,
       cy: data.y,
       r: "1.5",
-      fill: "black",
+      fill: "#2066a8",
     });
     svg.appendChild(circle);
   }
@@ -179,7 +193,7 @@ export const createProgressGraph = (transactions, totalXp) => {
       y1: graphData[i - 1].y,
       x2: graphData[i].x,
       y2: graphData[i].y,
-      stroke: "black",
+      stroke: "#2066a8",
     });
     svg.appendChild(line);
   }
@@ -209,7 +223,7 @@ export const createXpByProjectGraph = (data) => {
       y: (index + 1) * (barHeight + barGap),
       width: barLength,
       height: barHeight,
-      fill: "#BDD888",
+      fill: "#cde1ec",
     });
     const pathText = svgElement("text", {
       x: barWidth,
@@ -225,7 +239,7 @@ export const createXpByProjectGraph = (data) => {
       "dominant-baseline": "middle",
       fill: "black",
     });
-    amountText.textContent = item.amount / 1000 + " kB";
+    amountText.textContent = (item.amount / 1000).toFixed(1) + " kB";
 
     barGraph.appendChild(bar);
     barGraph.appendChild(pathText);
