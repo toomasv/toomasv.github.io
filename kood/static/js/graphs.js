@@ -8,7 +8,7 @@ export const createProgressGraph = (transactions, totalXp) => {
 
   const latestTime = new Date(Math.max(...dates));
   const timeDiff = latestTime - earliestTime;
-  const dayDiff = timeDiff / 1000 / 60 / 60 / 24;
+  const dayDiff = Math.ceil(timeDiff / 1000 / 60 / 60 / 24);
 
   if (dayDiff > 30 && latestTime.getDate() !== 1) {
     // set latestTime to the first of the next month, that way the months comparison lines are consistent
@@ -27,12 +27,12 @@ export const createProgressGraph = (transactions, totalXp) => {
 
   const graphWidth = 440;
   const graphHeight = 300;
-  const xPadding = 50;
+  const xPadding = 40;
   const yPadding = 20;
 
   totalXp /= 1000;
-  const xScale = (graphWidth - xPadding * 2) / (latestTime - earliestTime);
-  const yScale = (graphHeight - yPadding * 2) / totalXp;
+  const xScale = (graphWidth - 2 * xPadding) / (latestTime - earliestTime);
+  const yScale = (graphHeight - 2 * yPadding) / totalXp;
 
   const graphData = transactions.map((transaction) => {
     totalXp -= transaction.amount / 1000;
@@ -42,20 +42,28 @@ export const createProgressGraph = (transactions, totalXp) => {
     };
   });
 
+  const hsvg = svgElement("svg", {
+    width: "100%",
+    height: "100%",
+    viewBox: "0 0 100 30",
+    preserveAspectRatio: "xMidYMid meet",
+    class: "hidden",
+  });
+  document.getElementById("lineGraph").appendChild(hsvg);
+
   const svg = svgElement("svg", {
     width: "100%",
     height: "100%",
-    viewBox: "0 0 400 300",
+    viewBox: "0 0 415 315",
     preserveAspectRatio: "xMidYMid meet",
   });
 
-  const backgroundLineHorizontalDistance =
-    graphHeight / (graphHeightIncrements * yScale);
-  const backgroundLineHorizontalIncrement =
-    graphHeight / backgroundLineHorizontalDistance;
+  const horizontalLineDistance = graphHeight / (graphHeightIncrements * yScale);
+  const horizontalLineIncrement = graphHeight / horizontalLineDistance;
 
-  for (let i = 0; i < backgroundLineHorizontalDistance; i++) {
-    const y = i * backgroundLineHorizontalIncrement + yPadding;
+  let y = 0;
+  for (let i = 0; i < horizontalLineDistance; i++) {
+    y = i * horizontalLineIncrement + yPadding;
 
     const line = svgElement("line", {
       x1: xPadding,
@@ -69,7 +77,7 @@ export const createProgressGraph = (transactions, totalXp) => {
 
     const text = svgElement("text", {
       x: 0,
-      y: y,
+      y: y + 3,
       fill: "black",
       "font-size": "10",
       transform: `rotate(180 0 ${y}) scale(-1, 1)`,
@@ -107,7 +115,7 @@ export const createProgressGraph = (transactions, totalXp) => {
   }
 
   const tDiff = dayDiff > 30 ? monthsDifference : dayDiff;
-  const backgroundLineVerticalIncrement = (graphWidth - xPadding * 2) / tDiff;
+  const verticalLineIncrement = (graphWidth - 2 * xPadding) / tDiff;
 
   let startMonth = earliestTime.getMonth();
   let startYear = earliestTime.getFullYear().toString().slice(2);
@@ -117,35 +125,42 @@ export const createProgressGraph = (transactions, totalXp) => {
       startMonth -= 12;
       startYear++;
     }
-    const x = i * backgroundLineVerticalIncrement + xPadding;
+    const x = i * verticalLineIncrement + xPadding;
 
     const line = svgElement("line", {
       x1: x,
       y1: yPadding,
       x2: x,
-      y2: graphHeight + yPadding,
+      y2: y,
       stroke: "#729A9A",
       "stroke-width": "0.5px",
     });
     svg.appendChild(line);
 
-    const text = svgElement("text", {
-      x: x - 5,
-      y: 5,
-      fill: "black",
-      "font-size": "10",
-      transform: `rotate(180 0 5) scale(-1, 1)`,
-    });
-    if (dayDiff > 30) {
-      text.textContent = `${monthMap.get(startMonth)} ${startYear}`;
-      bigTimeInterval ? (startMonth += 3) : startMonth++;
-    } else {
-      let day = earliestTime.getDate() + i;
-      let month = earliestTime.getMonth() + 1;
-      let maxDay = new Date(earliestTime.getFullYear(), month, 0).getDate();
-      text.textContent = `${day > maxDay ? day - maxDay : day}`;
+    if (i < tDiff) {
+      const text = svgElement("text", {
+        x: x,
+        y: 5,
+        fill: "black",
+        "font-size": "10",
+        transform: `rotate(180 0 5) scale(-1, 1)`,
+      });
+      if (dayDiff > 30) {
+        text.textContent = `${monthMap.get(startMonth)} ${startYear}`;
+        bigTimeInterval ? (startMonth += 3) : startMonth++;
+      } else {
+        let day = earliestTime.getDate() + i;
+        let month = earliestTime.getMonth() + 1;
+        let maxDay = new Date(earliestTime.getFullYear(), month, 0).getDate();
+        text.textContent = `${day > maxDay ? day - maxDay : day}`;
+      }
+      hsvg.appendChild(text);
+      const dx = Math.round(
+        (verticalLineIncrement - text.getComputedTextLength()) / 2
+      );
+      text.setAttribute("x", x + dx);
+      svg.appendChild(text);
     }
-    svg.appendChild(text);
   }
 
   for (const data of graphData) {
@@ -235,4 +250,4 @@ const svgElement = (type, attributes) => {
     element.setAttribute(key, value);
   }
   return element;
-}
+};

@@ -34,7 +34,7 @@ a {
    justify-content: center;
    align-items: center;
    border: 1px solid #000000;
-   border-radius: 10px;
+   border-radius: 5px;
 }
 
 .errorMessage {
@@ -138,7 +138,7 @@ a {
    flex-grow: 1;
 }
 
-.xpByTaskInnerContainer {
+#xpContainer {
    position: relative;
    display: flex;
    flex-direction: column;
@@ -147,33 +147,26 @@ a {
    max-width: 330px;
 }
 
-.xpByTaskInnerContainer h1 {
+#xpContainer h1 {
    text-align: center;
 }
 
-.xpByTaskGraphContainer {
+#barGraph {/*#xpGraphContainer {*/
    flex: 1;
    overflow-y: auto;
    width: 100%;
 }
 
-#auditData, #userData, .xpByTaskInnerContainer, #progressGraphContainer {
-   /*background-color: #D8D0D0;
-   background: linear-gradient(0deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);*/
+#auditData, #userData, #xpContainer, #progressGraphContainer {
    border: rgb(0, 0, 0) 1px solid;
    border-radius: 15px;
    margin: 10px;
    padding: 10px;
 }
 
-.xpByTaskInnerContainer, #progressGraphContainer, #lineGraph {
+#xpContainer, #progressGraphContainer, #lineGraph {
    width: 100%; 
    height: auto; 
-}
-
-/* deals with reversed -Y scaling */
-#lineGraph {
-   /*background: linear-gradient(180deg, rgba(37,37,37,0.16010154061624648) 0%, rgba(98,98,96,0.09567577030812324) 14%, rgba(27,27,27,0) 100%);*/
 }
 
 #generalSelection {
@@ -187,7 +180,6 @@ a {
    display: flex;
    flex-direction: row;
    align-items: center;
-   /*justify-content: center;*/
    margin-bottom: 20px;
  }
 
