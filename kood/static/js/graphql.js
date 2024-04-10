@@ -13,8 +13,8 @@ const loadUserProfile = async () => {
 
     const showData = async (type = "div-01\\/[-\\\\w]+$") => {
       const userData = await getUserData(userToken, type);
-      const xpByProject = await getXpByProject(userToken, type);
       const userProgress = await getUserProgress(userToken, type);
+      const xpByProject = await getXpByProject(userToken, type);
 
       createUserData(userData);
       document.getElementById("lineGraph").innerHTML = "";
@@ -72,7 +72,6 @@ const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
           }
         }
     `;
-  console.log("query:", query);
   const queryBody = {
     query,
   };
@@ -131,7 +130,6 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
     const updatedPath = transaction.path.replace(pathStart, "");
     return { ...transaction, path: updatedPath };
   });
-  console.log("result:", xpByProjectData);
   let data = xpByProjectData.reduce((acc, curr) => {
     const item = curr.path.split("/")[0];
     acc.set(item, acc.get(item) ? acc.get(item) + curr.amount : curr.amount);
@@ -141,7 +139,6 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
     return { path: key, amount: value };
   });
   data.sort((a, b) => a.amount - b.amount);
-  console.log("data:", data);
   return data;
 };
 
@@ -158,6 +155,7 @@ const getUserProgress = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
             ) {
                 amount
                 createdAt
+                path
             }
         }
     `;
@@ -173,8 +171,6 @@ const getUserProgress = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 
 const getQueryResults = async (queryBody, userToken) => {
   const url = "https://01.kood.tech/api/graphql-engine/v1/graphql";
-
-  console.log("queryBody:", queryBody);
 
   const options = {
     method: "POST",

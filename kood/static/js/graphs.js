@@ -9,8 +9,12 @@ export const createProgressGraph = (transactions, totalXp) => {
   const timeDiff = latestTime - earliestTime;
   const dayDiff = Math.ceil(timeDiff / 1000 / 60 / 60 / 24);
 
+  const timeRange = document.getElementById("timeRange");
+
+  timeRange.textContent = `(${earliestTime
+    .toString()
+    .slice(4, 15)} - ${latestTime.toString().slice(4, 15)})`;
   if (dayDiff > 30 && latestTime.getDate() !== 1) {
-    // set latestTime to the first of the next month, that way the months comparison lines are consistent
     latestTime.setMonth(latestTime.getMonth() + 1);
     latestTime.setDate(1);
   } else {
@@ -20,19 +24,14 @@ export const createProgressGraph = (transactions, totalXp) => {
 
   // add the baseline to the beginning of the transactions array
   if (dayDiff > 30 && earliestTime.getDate() !== 1) {
-    earliestTime.setDate(1); // set earliestTime to the first of the first transaction month
-    transactions.unshift({
-      amount: 0,
-      createdAt: Math.min(...dates),
-    });
+    earliestTime.setDate(1);
   } else {
     earliestTime.setHours(0, 0, 0, 0);
-    transactions.unshift({
-      amount: 0,
-      createdAt: Math.min(...dates),
-    });
   }
-
+  transactions.unshift({
+    amount: 0,
+    createdAt: Math.min(...dates),
+  });
 
   const graphWidth = 440;
   const graphHeight = 300;
@@ -48,6 +47,7 @@ export const createProgressGraph = (transactions, totalXp) => {
     return {
       x: (new Date(transaction.createdAt) - earliestTime) * xScale + xPadding,
       y: graphHeight - (totalXp * yScale + yPadding),
+      title: transaction.path,
     };
   });
 
@@ -93,10 +93,8 @@ export const createProgressGraph = (transactions, totalXp) => {
     });
     text.textContent = i * graphHeightIncrements + " kB";
     hsvg.appendChild(text);
-    const dx = Math.round(
-      xPadding - text.getComputedTextLength()
-    );
-    text.setAttribute("x", dx-5);
+    const dx = Math.round(xPadding - text.getComputedTextLength());
+    text.setAttribute("x", dx - 5);
     svg.appendChild(text);
   }
 
@@ -176,17 +174,6 @@ export const createProgressGraph = (transactions, totalXp) => {
       svg.appendChild(text);
     }
   }
-
-  for (const data of graphData) {
-    const circle = svgElement("circle", {
-      cx: data.x,
-      cy: data.y,
-      r: "1.5",
-      fill: "#2066a8",
-    });
-    svg.appendChild(circle);
-  }
-
   for (let i = 1; i < graphData.length; i++) {
     const line = svgElement("line", {
       x1: graphData[i - 1].x,
@@ -196,6 +183,18 @@ export const createProgressGraph = (transactions, totalXp) => {
       stroke: "#2066a8",
     });
     svg.appendChild(line);
+  }
+
+  //console.log("graphData:",graphData);
+  for (const data of graphData) {
+    const circle = svgElement("circle", {
+      cx: data.x,
+      cy: data.y,
+      r: "1.5",
+      fill: "#2066a8",
+    });
+    if (data.title) circle.innerHTML = `<title>${data.title.replace("/johvi/", "")}</title>`;
+    svg.appendChild(circle);
   }
 
   document.getElementById("lineGraph").innerHTML = "";
@@ -223,7 +222,7 @@ export const createXpByProjectGraph = (data) => {
       y: (index + 1) * (barHeight + barGap),
       width: barLength,
       height: barHeight,
-      fill: "#cde1ec",
+      fill: "#d47264", 
     });
     const pathText = svgElement("text", {
       x: barWidth,
