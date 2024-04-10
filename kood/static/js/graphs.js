@@ -185,7 +185,6 @@ export const createProgressGraph = (transactions, totalXp) => {
     svg.appendChild(line);
   }
 
-  //console.log("graphData:",graphData);
   for (const data of graphData) {
     const circle = svgElement("circle", {
       cx: data.x,

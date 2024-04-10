@@ -48,7 +48,7 @@ const loadUserProfile = async () => {
 };
 
 // Nested query
-const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
+const getUserData = async (userToken, path = "div-01\\/[-\\\\w]+$") => {
   const query = `{
         user {
             login
@@ -61,7 +61,7 @@ const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
             totalDown
             transactions_aggregate (
               where: {
-                path: {_regex: "^\\/johvi\\/${type}"}
+                path: {_regex: "^\\/johvi\\/${path}"}
                 type: {_eq:"xp"}
               },
             ) {
@@ -95,12 +95,12 @@ const getUserData = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 };
 
 // Variable query
-const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
+const getXpByProject = async (userToken, path = "div-01\\/[-\\\\w]+$") => {
   const query = `
         query GetXpByProject($type: String!) {
             transaction(
                 where: {
-                    path: { _regex: "^\\/johvi\\/${type}" }
+                    path: { _regex: "^\\/johvi\\/${path}" }
                     type: { _eq: $type }
                 },
                 order_by: { amount: asc }
@@ -120,9 +120,9 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
   const results = await getQueryResults(queryBody, userToken);
 
   let pathStart;
-  if (RegExp("piscine-js").test(type)) pathStart = "/johvi/div-01/piscine-js/";
-  else if (RegExp("quest").test(type)) pathStart = "/johvi/piscine-go/";
-  else if (RegExp("exam").test(type))
+  if (RegExp("piscine-js").test(path)) pathStart = "/johvi/div-01/piscine-js/";
+  else if (RegExp("quest").test(path)) pathStart = "/johvi/piscine-go/";
+  else if (RegExp("exam").test(path))
     pathStart = /^.*(deprecated-24-01-2024-|exam-..\/)/;
   else pathStart = "/johvi/div-01/";
 
@@ -143,12 +143,12 @@ const getXpByProject = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
 };
 
 // Normal query
-const getUserProgress = async (userToken, type = "div-01\\/[-\\\\w]+$") => {
+const getUserProgress = async (userToken, path = "div-01\\/[-\\\\w]+$") => {
   const query = `
         {
             transaction(
                 where: {
-                    path: { _regex: "^\\/johvi\\/${type}" }
+                    path: { _regex: "^\\/johvi\\/${path}" }
                     type: { _eq: "xp" }
                 },
                 order_by: { createdAt: asc }
@@ -220,19 +220,12 @@ const createUserData = (data) => {
   `;
 };
 
-const calculateAge = (dateOfBirth) => {
-  const dob = new Date(dateOfBirth);
+const calculateAge = (dob) => {
+  const dateOfBirth = new Date(dob);
   const currentDate = new Date();
 
-  let age = currentDate.getFullYear() - dob.getFullYear();
-
-  if (
-    currentDate.getMonth() < dob.getMonth() ||
-    (currentDate.getMonth() === dob.getMonth() &&
-      currentDate.getDate() < dob.getDate())
-  ) {
-    age--;
-  }
+  let age = currentDate - dateOfBirth;
+  age = Math.floor(age / 31556952000); // Milliseconds to years
 
   return age;
 };

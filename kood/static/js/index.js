@@ -41,7 +41,7 @@ const addLoginFunctionality = () => {
 };
 
 const attemptLogin = async (usernameOrEmail, password) => {
-  const url = "https://01.kood.tech/api/auth/signin"; // Ensure this API is accessible
+  const url = "https://01.kood.tech/api/auth/signin"; 
 
   const options = {
     method: "POST",
