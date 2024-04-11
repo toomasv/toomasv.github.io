@@ -35,7 +35,7 @@ const loadUserProfile = async () => {
             showData("piscine-go\\/quest");
             break;
           case "exam":
-            showData("piscine-go\\/exam");
+            showData("piscine-go\\/(dummy-)?exam");
             break;
           case "piscine-js":
             showData("div-01\\/piscine-js");
@@ -123,7 +123,7 @@ const getXpByProject = async (userToken, path = "div-01\\/[-\\\\w]+$") => {
   if (RegExp("piscine-js").test(path)) pathStart = "/johvi/div-01/piscine-js/";
   else if (RegExp("quest").test(path)) pathStart = "/johvi/piscine-go/";
   else if (RegExp("exam").test(path))
-    pathStart = /^.*(deprecated-24-01-2024-|exam-..\/)/;
+    pathStart = /^.*(deprecated-24-01-2024-|dummy-exam\/|exam-..\/)/;
   else pathStart = "/johvi/div-01/";
 
   const xpByProjectData = results.data.transaction.map((transaction) => {
