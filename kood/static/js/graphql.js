@@ -242,12 +242,13 @@ const format2 = (number, unit = false) => {
       unit = " MB";
     }
   }
-  let rounded = number.toFixed(2);
+  let rounded = number.toFixed(2).toString();
+  /*
   if (rounded == 0) {
     rounded = "0";
   } else {
     rounded = rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toString();
-  }
+  }*/
   return rounded + (unit ? unit : "");
 };
 
